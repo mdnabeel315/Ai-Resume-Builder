@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZNA – Innovate Your Career</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+/* ── DESIGN TOKENS ─────────────────────────────────────────────────── */
+:root {
+  --bg:           #08090d;
+  --bg2:          #0f1117;
+  --surface:      #13151c;
+  --surface2:     #1a1d27;
+  --border:       rgba(255,255,255,0.07);
+  --border-hover: rgba(99,179,255,0.35);
+  --text:         #eef0f7;
+  --muted:        #7c8096;
+  --muted2:       #4a4e62;
+  --accent:       #3b8bff;
+  --accent-glow:  rgba(59,139,255,0.18);
+  --accent2:      #00d68f;
+  --accent3:      #ff6b6b;
+  --gold:         #f5c842;
+  --grad-hero:    linear-gradient(135deg,#3b8bff 0%,#7b5cf0 50%,#00d68f 100%);
+  --grad-card:    linear-gradient(145deg,#13151c,#1a1d27);
+  --font-display: 'Syne', sans-serif;
+  --font-body:    'DM Sans', sans-serif;
+  --radius:       20px;
+  --radius-sm:    12px;
+  --shadow:       0 8px 40px rgba(0,0,0,0.5);
+  --shadow-sm:    0 2px 16px rgba(0,0,0,0.3);
+}
+[data-theme="light"] {
+  --bg:           #f0f2f8;
+  --bg2:          #e8eaf4;
+  --surface:      #ffffff;
+  --surface2:     #f4f5fb;
+  --border:       rgba(0,0,0,0.07);
+  --border-hover: rgba(59,139,255,0.4);
+  --text:         #0d0f1a;
+  --muted:        #555a72;
+  --muted2:       #9299b0;
+  --accent:       #1a6fff;
+  --accent-glow:  rgba(26,111,255,0.12);
+  --accent2:      #00a870;
+  --accent3:      #e03a3a;
+  --gold:         #d4a800;
+  --grad-hero:    linear-gradient(135deg,#1a6fff 0%,#6b46e0 50%,#00a870 100%);
+  --grad-card:    linear-gradient(145deg,#ffffff,#f4f5fb);
+  --shadow:       0 8px 40px rgba(0,0,0,0.10);
+  --shadow-sm:    0 2px 16px rgba(0,0,0,0.06);
+}
+
+/* ── RESET ─────────────────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  font-family:var(--font-body);
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+  transition:background .35s,color .35s;
+}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
+
+/* ── NOISE TEXTURE OVERLAY ──────────────────────────────────────────── */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;opacity:.4;
+}
+
+/* ── NAVBAR ─────────────────────────────────────────────────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 60px;
+  background:rgba(8,9,13,0.7);
+  backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+  transition:background .35s,border-color .35s;
+}
+[data-theme="light"] nav{background:rgba(240,242,248,0.8)}
+.nav-logo{display:flex;flex-direction:column;gap:1px}
+.nav-logo-text{
+  font-family:var(--font-display);font-size:28px;font-weight:800;
+  background:var(--grad-hero);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;letter-spacing:-0.02em;
+}
+.nav-logo-sub{
+  font-size:8px;font-weight:600;letter-spacing:0.22em;
+  text-transform:uppercase;color:var(--muted);margin-left:2px;
+}
+.nav-right{display:flex;align-items:center;gap:20px}
+.nav-link{
+  font-size:14px;font-weight:500;color:var(--muted);
+  transition:color .2s;cursor:pointer;
+}
+.nav-link:hover{color:var(--text)}
+.theme-btn{
+  width:40px;height:40px;border-radius:50%;border:1px solid var(--border);
+  background:var(--surface);cursor:pointer;font-size:16px;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s;color:var(--text);
+}
+.theme-btn:hover{border-color:var(--accent);background:var(--accent-glow)}
+.nav-cta{
+  background:var(--accent);color:#fff;
+  padding:10px 22px;border-radius:100px;
+  font-size:13px;font-weight:700;letter-spacing:0.01em;
+  border:none;cursor:pointer;transition:all .22s;
+  font-family:var(--font-body);
+}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 8px 24px var(--accent-glow),0 0 0 1px var(--accent)}
+
+/* ── HERO ────────────────────────────────────────────────────────────── */
+.hero{
+  min-height:100vh;display:flex;align-items:center;
+  padding:120px 60px 80px;position:relative;overflow:hidden;
+}
+.hero-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:80px;
+  align-items:center;max-width:1280px;margin:0 auto;width:100%;
+  position:relative;z-index:1;
+}
+
+/* Animated background blobs */
+.hero-blob{
+  position:absolute;border-radius:50%;filter:blur(90px);opacity:0.12;
+  pointer-events:none;animation:blobFloat 8s ease-in-out infinite;
+}
+.blob1{width:500px;height:500px;background:var(--accent);top:-100px;right:-100px;animation-delay:0s}
+.blob2{width:400px;height:400px;background:#7b5cf0;bottom:-80px;left:10%;animation-delay:3s}
+.blob3{width:300px;height:300px;background:var(--accent2);top:40%;right:30%;animation-delay:5s}
+@keyframes blobFloat{
+  0%,100%{transform:translateY(0) scale(1)}
+  50%{transform:translateY(-30px) scale(1.06)}
+}
+
+.hero-left{display:flex;flex-direction:column;gap:28px}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:100px;padding:6px 16px 6px 8px;width:fit-content;
+  font-size:12px;font-weight:600;color:var(--muted);
+}
+.badge-dot{
+  width:20px;height:20px;border-radius:50%;
+  background:var(--grad-hero);display:flex;align-items:center;justify-content:center;
+  font-size:10px;
+}
+.hero-h1{
+  font-family:var(--font-display);
+  font-size:clamp(42px,5.5vw,72px);
+  font-weight:800;line-height:1.05;letter-spacing:-0.04em;
+  color:var(--text);
+}
+.hero-h1 .gradient-word{
+  background:var(--grad-hero);-webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-desc{
+  font-size:17px;line-height:1.7;color:var(--muted);
+  max-width:480px;font-weight:400;
+}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap}
+.btn-primary{
+  background:var(--accent);color:#fff;
+  padding:14px 32px;border-radius:100px;
+  font-family:var(--font-display);font-size:15px;font-weight:700;
+  border:none;cursor:pointer;transition:all .22s;
+  box-shadow:0 4px 20px var(--accent-glow);
+  display:flex;align-items:center;gap:8px;
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 30px var(--accent-glow)}
+.btn-secondary{
+  background:transparent;color:var(--text);
+  padding:14px 28px;border-radius:100px;
+  font-family:var(--font-display);font-size:15px;font-weight:600;
+  border:1px solid var(--border);cursor:pointer;transition:all .22s;
+  display:flex;align-items:center;gap:8px;
+}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-glow)}
+.hero-stats{display:flex;gap:32px}
+.stat-item{display:flex;flex-direction:column;gap:2px}
+.stat-num{
+  font-family:var(--font-display);font-size:28px;font-weight:800;
+  color:var(--text);letter-spacing:-0.03em;
+}
+.stat-num span{color:var(--accent)}
+.stat-label{font-size:12px;color:var(--muted);font-weight:500}
+
+/* Hero right: mock UI card */
+.hero-right{position:relative;display:flex;align-items:center;justify-content:center}
+.mock-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:28px;
+  box-shadow:var(--shadow);width:100%;max-width:440px;
+  animation:cardFloat 6s ease-in-out infinite;
+  position:relative;z-index:2;
+}
+@keyframes cardFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-12px)}
+}
+.mock-header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.mock-avatar{
+  width:44px;height:44px;border-radius:50%;
+  background:var(--grad-hero);display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-display);font-weight:800;color:#fff;font-size:16px;
+}
+.mock-name{font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--text)}
+.mock-title{font-size:12px;color:var(--muted);margin-top:2px}
+.mock-score-row{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--surface2);border-radius:var(--radius-sm);padding:14px 18px;
+  margin-bottom:14px;border:1px solid var(--border);
+}
+.mock-score-label{font-size:13px;font-weight:600;color:var(--text)}
+.mock-score-val{
+  font-family:var(--font-display);font-size:32px;font-weight:800;
+  color:var(--accent2);letter-spacing:-0.03em;
+}
+.mock-bar-wrap{margin-bottom:6px}
+.mock-bar-label{font-size:11px;color:var(--muted);margin-bottom:6px;font-weight:500}
+.mock-bar{height:5px;background:var(--surface2);border-radius:99px;overflow:hidden}
+.mock-bar-fill{height:100%;border-radius:99px;background:var(--grad-hero);animation:barGrow 2s ease forwards}
+@keyframes barGrow{from{width:0}to{width:var(--w)}}
+.mock-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.mock-tag{
+  font-size:11px;font-weight:600;padding:4px 10px;border-radius:100px;
+  border:1px solid var(--border);color:var(--muted);
+}
+.mock-tag.green{color:var(--accent2);border-color:rgba(0,214,143,0.25);background:rgba(0,214,143,0.08)}
+.mock-tag.blue{color:var(--accent);border-color:rgba(59,139,255,0.25);background:rgba(59,139,255,0.08)}
+.mock-tag.red{color:var(--accent3);border-color:rgba(255,107,107,0.25);background:rgba(255,107,107,0.08)}
+
+/* Floating badges */
+.float-badge{
+  position:absolute;background:var(--surface);
+  border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:10px 14px;font-size:12px;font-weight:700;
+  box-shadow:var(--shadow-sm);white-space:nowrap;z-index:3;
+  animation:badgeFloat 4s ease-in-out infinite;
+}
+.float-badge .fb-icon{font-size:18px;margin-bottom:2px}
+.fb-top{top:-20px;left:-30px;animation-delay:1s}
+.fb-bottom{bottom:-15px;right:-25px;animation-delay:2.5s}
+@keyframes badgeFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-8px)}
+}
+
+/* ── PILLS / FEATURES STRIP ────────────────────────────────────────── */
+.pills-section{
+  padding:40px 60px;position:relative;z-index:1;
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  background:var(--bg2);
+}
+.pills-inner{max-width:1280px;margin:0 auto;display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.pill{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:100px;padding:9px 20px;
+  font-size:13px;font-weight:600;color:var(--text);
+  transition:all .2s;cursor:default;
+}
+.pill:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-glow);transform:translateY(-2px)}
+.pill-icon{font-size:15px}
+
+/* ── FEATURES SECTION ───────────────────────────────────────────────── */
+.section{padding:100px 60px;position:relative;z-index:1}
+.section-inner{max-width:1280px;margin:0 auto}
+.section-eyebrow{
+  font-size:11px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:14px;
+}
+.section-h2{
+  font-family:var(--font-display);font-size:clamp(32px,4vw,52px);
+  font-weight:800;letter-spacing:-0.03em;color:var(--text);
+  line-height:1.1;margin-bottom:16px;
+}
+.section-desc{font-size:16px;color:var(--muted);line-height:1.7;max-width:520px;margin-bottom:56px}
+
+/* Feature grid: asymmetric layout */
+.feature-grid{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:16px}
+.feat-card{
+  background:var(--grad-card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:32px;
+  transition:all .28s cubic-bezier(.25,.8,.25,1);
+  position:relative;overflow:hidden;
+}
+.feat-card::before{
+  content:'';position:absolute;inset:0;opacity:0;
+  background:radial-gradient(circle at 50% 0%,var(--accent-glow),transparent 70%);
+  transition:opacity .3s;
+}
+.feat-card:hover{transform:translateY(-5px);border-color:var(--border-hover);box-shadow:var(--shadow)}
+.feat-card:hover::before{opacity:1}
+.feat-card.tall{grid-row:span 2}
+.feat-icon{
+  width:52px;height:52px;border-radius:16px;
+  background:var(--accent-glow);border:1px solid rgba(59,139,255,0.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;margin-bottom:20px;
+}
+.feat-icon.green{background:rgba(0,214,143,0.1);border-color:rgba(0,214,143,0.2)}
+.feat-icon.purple{background:rgba(123,92,240,0.1);border-color:rgba(123,92,240,0.2)}
+.feat-icon.red{background:rgba(255,107,107,0.1);border-color:rgba(255,107,107,0.2)}
+.feat-icon.gold{background:rgba(245,200,66,0.1);border-color:rgba(245,200,66,0.2)}
+.feat-title{
+  font-family:var(--font-display);font-size:20px;font-weight:700;
+  color:var(--text);margin-bottom:10px;letter-spacing:-0.02em;
+}
+.feat-desc{font-size:14px;color:var(--muted);line-height:1.65}
+.feat-link{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:13px;font-weight:700;color:var(--accent);
+  margin-top:20px;cursor:pointer;transition:gap .2s;
+}
+.feat-link:hover{gap:10px}
+.feat-big-num{
+  font-family:var(--font-display);font-size:72px;font-weight:900;
+  letter-spacing:-0.05em;margin:16px 0;
+  background:var(--grad-hero);-webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;background-clip:text;
+  line-height:1;
+}
+
+/* ── HOW IT WORKS ───────────────────────────────────────────────────── */
+.how-section{
+  padding:100px 60px;background:var(--bg2);
+  border-top:1px solid var(--border);position:relative;z-index:1;
+}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:60px;position:relative}
+.steps::before{
+  content:'';position:absolute;top:42px;left:calc(16.66% + 10px);right:calc(16.66% + 10px);
+  height:1px;background:linear-gradient(90deg,var(--accent),transparent,var(--accent));
+  opacity:0.3;
+}
+.step{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:32px;position:relative}
+.step-num{
+  width:44px;height:44px;border-radius:50%;
+  background:var(--grad-hero);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-display);font-size:17px;font-weight:800;color:#fff;
+  margin-bottom:20px;
+}
+.step-title{font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px}
+.step-desc{font-size:14px;color:var(--muted);line-height:1.65}
+
+/* ── TESTIMONIAL / SOCIAL PROOF ─────────────────────────────────────── */
+.proof-section{padding:100px 60px;position:relative;z-index:1}
+.proof-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:56px}
+.proof-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:28px;
+  transition:all .25s;
+}
+.proof-card:hover{transform:translateY(-4px);border-color:var(--border-hover);box-shadow:var(--shadow)}
+.proof-stars{color:var(--gold);font-size:14px;margin-bottom:14px}
+.proof-text{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:20px;font-style:italic}
+.proof-author{display:flex;align-items:center;gap:12px}
+.proof-avatar{
+  width:38px;height:38px;border-radius:50%;
+  background:var(--grad-hero);display:flex;align-items:center;
+  justify-content:center;font-family:var(--font-display);font-weight:800;color:#fff;font-size:13px;
+}
+.proof-name{font-size:13px;font-weight:700;color:var(--text)}
+.proof-role{font-size:11px;color:var(--muted);margin-top:1px}
+
+/* ── CTA SECTION ────────────────────────────────────────────────────── */
+.cta-section{
+  padding:120px 60px;text-align:center;position:relative;z-index:1;overflow:hidden;
+  background:var(--bg2);border-top:1px solid var(--border);
+}
+.cta-section::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 100%,var(--accent-glow),transparent);
+  pointer-events:none;
+}
+.cta-h2{
+  font-family:var(--font-display);font-size:clamp(36px,5vw,64px);
+  font-weight:900;letter-spacing:-0.04em;color:var(--text);
+  line-height:1.05;margin-bottom:20px;
+}
+.cta-h2 span{background:var(--grad-hero);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.cta-desc{font-size:17px;color:var(--muted);max-width:480px;margin:0 auto 40px;line-height:1.7}
+.cta-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+/* ── FOOTER ──────────────────────────────────────────────────────────── */
+footer{
+  padding:40px 60px;border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  position:relative;z-index:1;
+}
+.footer-logo-text{
+  font-family:var(--font-display);font-size:20px;font-weight:800;
+  background:var(--grad-hero);-webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;background-clip:text;
+}
+.footer-right{font-size:13px;color:var(--muted)}
+
+/* ── SCROLL REVEAL ANIMATION ────────────────────────────────────────── */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ── RESPONSIVE ──────────────────────────────────────────────────────── */
+@media(max-width:900px){
+  nav{padding:16px 24px}
+  .hero{padding:100px 24px 60px}
+  .hero-grid{grid-template-columns:1fr;gap:40px}
+  .hero-right{display:none}
+  .section,.how-section,.proof-section,.cta-section,.pills-section{padding:70px 24px}
+  .feature-grid{grid-template-columns:1fr}
+  .feat-card.tall{grid-row:auto}
+  .steps{grid-template-columns:1fr}
+  .steps::before{display:none}
+  .proof-grid{grid-template-columns:1fr}
+  footer{flex-direction:column;gap:12px;text-align:center;padding:32px 24px}
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAVBAR ─────────────────────────────────────────────────────────── -->
+<nav>
+  <div class="nav-logo">
+    <span class="nav-logo-text">ZNA✦</span>
+    <span class="nav-logo-sub">Innovate Your Career</span>
+  </div>
+  <div class="nav-right">
+    <span class="nav-link" onclick="scrollTo('#features')">Features</span>
+    <span class="nav-link" onclick="scrollTo('#how')">How it works</span>
+    <span class="nav-link" onclick="scrollTo('#proof')">Reviews</span>
+    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn" title="Toggle theme">🌙</button>
+    <button class="nav-cta" onclick="goToApp()">Launch App →</button>
+  </div>
+</nav>
+
+<!-- ── HERO ───────────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-blob blob1"></div>
+  <div class="hero-blob blob2"></div>
+  <div class="hero-blob blob3"></div>
+
+  <div class="hero-grid">
+    <div class="hero-left reveal">
+      <div class="hero-badge">
+        <div class="badge-dot">✦</div>
+        Powered by Gemini 2.0 Flash
+      </div>
+      <h1 class="hero-h1">
+        The Best Free AI<br>
+        <span class="gradient-word">Resume Builder</span>
+      </h1>
+      <p class="hero-desc">
+        Our Resume Builder creates ATS-friendly resumes in minutes.
+        Build a new resume or improve an existing one with unlimited
+        downloads, instant job matching, and smart AI suggestions.
+      </p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="goToApp()">
+          🚀 Start Building Free
+        </button>
+        <button class="btn-secondary" onclick="scrollTo('#features')">
+          See Features →
+        </button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num">3<span>+</span></div>
+          <div class="stat-label">Resume Styles</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">100<span>%</span></div>
+          <div class="stat-label">Free to use</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">AI<span>✦</span></div>
+          <div class="stat-label">Powered</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-right reveal" style="transition-delay:.2s">
+      <div class="float-badge fb-top">
+        <div class="fb-icon">✅</div>
+        ATS Score: 94%
+      </div>
+      <div class="mock-card">
+        <div class="mock-header">
+          <div class="mock-avatar">TM</div>
+          <div>
+            <div class="mock-name">Tina Miller</div>
+            <div class="mock-title">Senior Marketing Manager · WeWork</div>
+          </div>
+        </div>
+        <div class="mock-score-row">
+          <div>
+            <div class="mock-score-label">ATS Match Score</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px">vs Software Engineer, L5</div>
+          </div>
+          <div class="mock-score-val">94%</div>
+        </div>
+        <div class="mock-bar-wrap">
+          <div class="mock-bar-label">Resume Structure</div>
+          <div class="mock-bar"><div class="mock-bar-fill" style="--w:88%"></div></div>
+        </div>
+        <div class="mock-bar-wrap" style="margin-top:10px">
+          <div class="mock-bar-label">Keyword Match</div>
+          <div class="mock-bar"><div class="mock-bar-fill" style="--w:94%"></div></div>
+        </div>
+        <div class="mock-bar-wrap" style="margin-top:10px">
+          <div class="mock-bar-label">Measurable Results</div>
+          <div class="mock-bar"><div class="mock-bar-fill" style="--w:79%"></div></div>
+        </div>
+        <div class="mock-tags">
+          <span class="mock-tag green">✓ Python</span>
+          <span class="mock-tag green">✓ Leadership</span>
+          <span class="mock-tag blue">+ Docker</span>
+          <span class="mock-tag red">✗ Kubernetes</span>
+        </div>
+      </div>
+      <div class="float-badge fb-bottom">
+        <div class="fb-icon">✉️</div>
+        Cover Letter Generated
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PILLS STRIP ────────────────────────────────────────────────────── -->
+<div class="pills-section">
+  <div class="pills-inner">
+    <div class="pill"><span class="pill-icon">🎯</span> ATS Optimised</div>
+    <div class="pill"><span class="pill-icon">⚡</span> Instant Generation</div>
+    <div class="pill"><span class="pill-icon">🔗</span> LinkedIn Integration</div>
+    <div class="pill"><span class="pill-icon">📄</span> PDF Export</div>
+    <div class="pill"><span class="pill-icon">🔍</span> Semantic ATS Scanner</div>
+    <div class="pill"><span class="pill-icon">✉️</span> Auto Cover Letters</div>
+    <div class="pill"><span class="pill-icon">🌗</span> Dark & Light Mode</div>
+  </div>
+</div>
+
+<!-- ── FEATURES ───────────────────────────────────────────────────────── -->
+<section class="section" id="features">
+  <div class="section-inner">
+    <p class="section-eyebrow reveal">Everything you need</p>
+    <h2 class="section-h2 reveal">Built for the modern<br>job seeker</h2>
+    <p class="section-desc reveal">Five powerful tools in one workspace. No account needed — just your Gemini API key.</p>
+
+    <div class="feature-grid">
+      <div class="feat-card tall reveal">
+        <div class="feat-icon">🎯</div>
+        <div class="feat-title">ATS Optimisation Engine</div>
+        <div class="feat-desc">Semantic NLP analysis compares your resume against any job description and returns a match score, matched keywords, missing gaps, and one-click tailoring.</div>
+        <div class="feat-big-num">94%</div>
+        <div style="font-size:13px;color:var(--muted)">Average ATS score after tailoring</div>
+        <div class="feat-link">Learn more →</div>
+      </div>
+      <div class="feat-card reveal" style="transition-delay:.1s">
+        <div class="feat-icon green">⚡</div>
+        <div class="feat-title">Auto-Parse LinkedIn</div>
+        <div class="feat-desc">Paste your LinkedIn profile or old resume. Gemini extracts and structures everything automatically.</div>
+        <div class="feat-link">Try it →</div>
+      </div>
+      <div class="feat-card reveal" style="transition-delay:.15s">
+        <div class="feat-icon purple">✉️</div>
+        <div class="feat-title">AI Cover Letters</div>
+        <div class="feat-desc">One-click personalised cover letters tailored to each company and role. Professional, concise, and compelling.</div>
+        <div class="feat-link">See example →</div>
+      </div>
+      <div class="feat-card reveal" style="transition-delay:.2s">
+        <div class="feat-icon gold">📄</div>
+        <div class="feat-title">PDF & Markdown Export</div>
+        <div class="feat-desc">Download your resume in clean PDF or editable Markdown. No watermarks, no limits.</div>
+        <div class="feat-link">Export now →</div>
+      </div>
+      <div class="feat-card reveal" style="transition-delay:.25s">
+        <div class="feat-icon red">🔗</div>
+        <div class="feat-title">LinkedIn Job Portal</div>
+        <div class="feat-desc">Set your target job title and we surface live LinkedIn listings instantly. Direct apply in one tap.</div>
+        <div class="feat-link">Open portal →</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HOW IT WORKS ───────────────────────────────────────────────────── -->
+<section class="how-section" id="how">
+  <div class="section-inner">
+    <p class="section-eyebrow reveal">How it works</p>
+    <h2 class="section-h2 reveal">Three steps to your<br>dream job</h2>
+
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-num">1</div>
+        <div class="step-title">Paste your data</div>
+        <div class="step-desc">Copy your LinkedIn profile, paste your old resume, or fill in the structured form. Our AI extracts every detail automatically.</div>
+      </div>
+      <div class="step reveal" style="transition-delay:.15s">
+        <div class="step-num">2</div>
+        <div class="step-title">Generate with AI</div>
+        <div class="step-desc">Gemini 2.0 Flash rewrites your experience with strong action verbs, quantified achievements, and ATS-optimised keywords for your target role.</div>
+      </div>
+      <div class="step reveal" style="transition-delay:.3s">
+        <div class="step-num">3</div>
+        <div class="step-title">Score, tailor & apply</div>
+        <div class="step-desc">Run the ATS scanner against any job description, tailor with one click, generate a cover letter, and apply directly via LinkedIn.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SOCIAL PROOF ───────────────────────────────────────────────────── -->
+<section class="proof-section" id="proof">
+  <div class="section-inner">
+    <p class="section-eyebrow reveal">Loved by job seekers</p>
+    <h2 class="section-h2 reveal">Real results, real people</h2>
+
+    <div class="proof-grid">
+      <div class="proof-card reveal">
+        <div class="proof-stars">★★★★★</div>
+        <div class="proof-text">"Got my ATS score from 58% to 92% in minutes. The tailoring feature is incredible — it knows exactly which keywords are missing."</div>
+        <div class="proof-author">
+          <div class="proof-avatar">AR</div>
+          <div>
+            <div class="proof-name">Arjun Rao</div>
+            <div class="proof-role">Software Engineer → Google</div>
+          </div>
+        </div>
+      </div>
+      <div class="proof-card reveal" style="transition-delay:.1s">
+        <div class="proof-stars">★★★★★</div>
+        <div class="proof-text">"The cover letter generator saved me hours. Each letter feels genuinely personalised — not templated. Landed 3 interviews in one week."</div>
+        <div class="proof-author">
+          <div class="proof-avatar">SP</div>
+          <div>
+            <div class="proof-name">Sanya Patel</div>
+            <div class="proof-role">Marketing Manager → Meta</div>
+          </div>
+        </div>
+      </div>
+      <div class="proof-card reveal" style="transition-delay:.2s">
+        <div class="proof-stars">★★★★★</div>
+        <div class="proof-text">"I pasted my LinkedIn and had a polished PDF resume in under 2 minutes. The dark mode is 🔥 and the LinkedIn job portal is a game changer."</div>
+        <div class="proof-author">
+          <div class="proof-avatar">ZK</div>
+          <div>
+            <div class="proof-name">Zaid Karim</div>
+            <div class="proof-role">CS Student → SWE Intern, Amazon</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FINAL CTA ───────────────────────────────────────────────────────── -->
+<section class="cta-section">
+  <div class="section-inner" style="position:relative;z-index:1">
+    <h2 class="cta-h2 reveal">Ready to <span>innovate</span><br>your career?</h2>
+    <p class="cta-desc reveal">Free. No account required. Powered by Gemini AI. Your resume — reimagined.</p>
+    <div class="cta-actions reveal">
+      <button class="btn-primary" onclick="goToApp()" style="font-size:16px;padding:16px 40px">
+        🚀 Start Building Free
+      </button>
+      <button class="btn-secondary" onclick="goToApp()" style="font-size:16px;padding:16px 32px">
+        📊 View Dashboard
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ──────────────────────────────────────────────────────────── -->
+<footer>
+  <div>
+    <div class="footer-logo-text">ZNA✦</div>
+    <div style="font-size:11px;color:var(--muted);margin-top:4px;letter-spacing:0.12em;text-transform:uppercase">Innovate Your Career</div>
+  </div>
+  <div class="footer-right">
+    © 2026 ZNA · Built with Streamlit + Gemini AI · Made with ♥
+  </div>
+</footer>
+
+<!-- ── JS ──────────────────────────────────────────────────────────────── -->
+<script>
+  // ── Theme toggle
+  const html = document.documentElement;
+  const btn  = document.getElementById('themeBtn');
+  let dark   = true;
+
+  function toggleTheme(){
+    dark = !dark;
+    html.setAttribute('data-theme', dark ? 'dark' : 'light');
+    btn.textContent = dark ? '🌙' : '☀️';
+  }
+
+  // ── Navigation: point to your Streamlit app URL
+  // Change this URL to your deployed Streamlit app address
+  const APP_URL = 'http://localhost:8501';
+
+  function goToApp(){
+    window.open(APP_URL, '_blank');
+  }
+
+  function scrollTo(id){
+    document.querySelector(id)?.scrollIntoView({behavior:'smooth'});
+  }
+
+  // ── Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){ e.target.classList.add('visible'); }
+    });
+  }, {threshold: 0.12});
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
